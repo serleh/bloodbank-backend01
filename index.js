@@ -10,6 +10,7 @@ const requestLogger = (req, res, next) => {
   console.log("Method:", req.method);
   console.log("Path:", req.path);
   console.log("Body:", req.body);
+  next();
 };
 
 const errorHandler = (error, req, res, next) => {
@@ -103,7 +104,7 @@ app.get("/api/donors/:id", (req, res, next) => {
 });
 
 // Delete a single donor
-app.delete("/api/donors/:id", (req, res) => {
+app.delete("/api/donors/:id", (req, res, next) => {
   Donor.findByIdAndDelete(req.params.id)
     .then((result) => {
       res.status(204).end();
