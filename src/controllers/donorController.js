@@ -1,0 +1,103 @@
+import Donor from "../models/Donor.js";
+
+// Creating a donor
+export const createDonor = async (req, res, next) => {
+  try {
+    const {
+      name,
+      address,
+      city,
+      gender,
+      weight,
+      dob,
+      bloodGroup,
+      contact,
+      email,
+      lastDonation,
+      phone,
+    } = req.body;
+
+    const donor = await Donor.create({
+      name,
+      address,
+      city,
+      gender,
+      weight,
+      dob,
+      bloodGroup,
+      contact,
+      email,
+      lastDonation,
+      phone,
+    });
+    res.status(201).json(donor);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Getting all donors
+export const getDonors = async (req, res, next) => {
+  try {
+    const donors = await Donor.find();
+
+    if (donors.length === 0) {
+      return res.status(404).json({ message: "No donors found" });
+    }
+    res.json(donors);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Search donor by location
+export const searchDonorByLocation = async (req, res, next) => {
+  try {
+    const { city, bloodGroup } = req.query;
+
+    if (!city || !bloodGroup) {
+      return res.status(400).json({ error: "City and blood group required" });
+    }
+
+    const filter = {
+      city: city.trim(),
+      bloodGroup: bloodGroup.replace(" ", "+").trim().toUpperCase(),
+    };
+
+    const donors = await Donor.find(filter);
+    // Checking if no donors
+    if (donors.length === 0) {
+      return res.status(404).json({ message: "No donors found" });
+    }
+    res.json(donors);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Search for a single donor
+export const searchDonor = async (req, res, next) => {
+  try {
+    const donor = await Donor.findById(req.params.id);
+    if (!donor) {
+      return res.status(404).json({ message: "Donor not found" });
+    }
+    res.status(200).json(donor);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Delete a donor
+export const removeDonor = async (req, res, next) => {
+  try {
+    const donor = await Donor.findByIdAndDelete(req.params.id);
+
+    if (!donor) {
+      return res.status(404).json({ message: "Donor not found" });
+    }
+    res.status(200).json({ message: "Donor deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
