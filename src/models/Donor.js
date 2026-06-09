@@ -5,7 +5,7 @@ const donorSchema = new mongoose.Schema(
     name: { type: String, required: true },
     address: String,
     city: String,
-    gender: { type: String, enum: ["Male", "Female"] },
+    gender: { type: String, enum: ["male", "female"] },
     weight: Number,
     dob: Date,
     bloodGroup: {
