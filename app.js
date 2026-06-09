@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import donorRoutes from "./src/routes/donorRoutes.js";
 import { unKnownEndpoint } from "./src/middlewares/notFound.js";
 import { requestLogger } from "./src/middlewares/requestLogger.js";
@@ -8,6 +9,8 @@ const app = express();
 
 //middlewares
 app.use(express.json());
+app.use(cors());
+
 app.use(requestLogger);
 
 // routes
