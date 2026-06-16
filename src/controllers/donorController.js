@@ -59,10 +59,15 @@ export const searchDonorByLocation = async (req, res, next) => {
       return res.status(400).json({ error: "City and blood group required" });
     }
 
-    const filter = {
-      city: city.trim(),
-      bloodGroup: bloodGroup.replace(" ", "+").trim().toUpperCase(),
-    };
+  
+    const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const filter = {
+  city: new RegExp(`^${escapeRegex(city.trim())}$`, "i"),
+  bloodGroup: bloodGroup.replace(" ", "+").trim().toUpperCase(),
+};
+console.log("Query:", req.query);
+console.log("Filter:", filter);
 
     const donors = await Donor.find(filter);
     // Checking if no donors
