@@ -1,7 +1,7 @@
 import express from "express";
 
 import {
-  createDonor,
+  
   getDonors,
   removeDonor,
   searchDonor,
@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.post("/", createDonor);
+//router.post("/", createDonor);
 router.get("/", getDonors);
 router.get("/search", searchDonorByLocation);
 router.get("/:id", searchDonor);

@@ -1,40 +1,6 @@
 import Donor from "../models/Donor.js";
 
-// Creating a donor
-export const createDonor = async (req, res, next) => {
-  try {
-    const {
-      name,
-      address,
-      city,
-      gender,
-      weight,
-      dob,
-      bloodGroup,
-      contact,
-      email,
-      lastDonation,
-      phone,
-    } = req.body;
 
-    const donor = await Donor.create({
-      name,
-      address,
-      city,
-      gender,
-      weight,
-      dob,
-      bloodGroup,
-      contact,
-      email,
-      lastDonation,
-      phone,
-    });
-    res.status(201).json(donor);
-  } catch (error) {
-    next(error);
-  }
-};
 
 // Getting all donors
 export const getDonors = async (req, res, next) => {
