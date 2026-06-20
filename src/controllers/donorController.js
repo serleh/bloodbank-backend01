@@ -1,45 +1,11 @@
 import Donor from "../models/Donor.js";
 
-// Creating a donor
-export const createDonor = async (req, res, next) => {
-  try {
-    const {
-      name,
-      address,
-      city,
-      gender,
-      weight,
-      dob,
-      bloodGroup,
-      contact,
-      email,
-      lastDonation,
-      phone,
-    } = req.body;
 
-    const donor = await Donor.create({
-      name,
-      address,
-      city,
-      gender,
-      weight,
-      dob,
-      bloodGroup,
-      contact,
-      email,
-      lastDonation,
-      phone,
-    });
-    res.status(201).json(donor);
-  } catch (error) {
-    next(error);
-  }
-};
 
 // Getting all donors
 export const getDonors = async (req, res, next) => {
   try {
-    const donors = await Donor.find();
+    const donors = await Donor.find().populate("user");
 
     if (donors.length === 0) {
       return res.status(404).json({ message: "No donors found" });
@@ -83,7 +49,7 @@ console.log("Filter:", filter);
 // Search for a single donor
 export const searchDonor = async (req, res, next) => {
   try {
-    const donor = await Donor.findById(req.params.id);
+    const donor = await Donor.findById(req.params.id).populate("user","username");
     if (!donor) {
       return res.status(404).json({ message: "Donor not found" });
     }
