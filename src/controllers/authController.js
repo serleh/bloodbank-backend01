@@ -1,14 +1,13 @@
-import bcrypt from 'bcrypt'
-import User from '../models/User.js'
-import Donor from '../models/Donor.js'
-
+import bcrypt from "bcrypt";
+import User from "../models/User.js";
+import Donor from "../models/Donor.js";
 
 // Creating a donor
 export const registerDonor = async (req, res, next) => {
   try {
     const {
-    username,
-    password,
+      username,
+      password,
 
       name,
       address,
@@ -24,17 +23,16 @@ export const registerDonor = async (req, res, next) => {
     } = req.body;
 
     // check username
-    const existingUser = await User.findOne({username})
+    const existingUser = await User.findOne({ username });
 
-    if(existingUser){
-        return res.status(400).json({error:"Username already exists"})
+    if (existingUser) {
+      return res.status(400).json({ error: "Username already exists" });
     }
 
     // Hash password
-    const passwordHash = await bcrypt.hash(password,10)
+    const passwordHash = await bcrypt.hash(password, 10);
 
-
-  // Create user
+    // Create user
     const user = await User.create({
       username,
       passwordHash,
@@ -42,7 +40,7 @@ export const registerDonor = async (req, res, next) => {
 
     // create donor
     const donor = await Donor.create({
-         user: user.id,
+      user: user.id,
       name,
       address,
       city,
@@ -58,5 +56,18 @@ export const registerDonor = async (req, res, next) => {
     res.status(201).json(donor);
   } catch (error) {
     next(error);
+  }
+};
+
+// getting user profile
+
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-passwordHash");
+    const donor = await Donor.findOne({ user: user.id });
+
+    res.json({ user, donor });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
   }
 };
