@@ -63,11 +63,33 @@ export const registerDonor = async (req, res, next) => {
 
 export const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-passwordHash");
-    const donor = await Donor.findOne({ user: user.id });
+    console.log("Decoded user:", req.user);
 
-    res.json({ user, donor });
+    const user = await User.findById(req.user.id).select("-passwordHash");
+
+    console.log("Found user:", user);
+
+    if (!user) {
+      return res.status(404).json({
+        error: "User not found",
+      });
+    }
+
+    const donor = await Donor.findOne({
+      user: user._id,
+    });
+
+    console.log("Found donor:", donor);
+
+    res.json({
+      user,
+      donor,
+    });
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    console.error(error);
+
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
