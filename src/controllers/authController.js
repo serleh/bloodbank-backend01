@@ -63,11 +63,7 @@ export const registerDonor = async (req, res, next) => {
 
 export const getMe = async (req, res) => {
   try {
-    console.log("Decoded user:", req.user);
-
     const user = await User.findById(req.user.id).select("-passwordHash");
-
-    console.log("Found user:", user);
 
     if (!user) {
       return res.status(404).json({
@@ -79,15 +75,11 @@ export const getMe = async (req, res) => {
       user: user._id,
     });
 
-    console.log("Found donor:", donor);
-
     res.json({
       user,
       donor,
     });
   } catch (error) {
-    console.error(error);
-
     res.status(500).json({
       error: error.message,
     });

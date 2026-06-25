@@ -1,7 +1,5 @@
 import Donor from "../models/Donor.js";
 
-
-
 // Getting all donors
 export const getDonors = async (req, res, next) => {
   try {
@@ -25,15 +23,12 @@ export const searchDonorByLocation = async (req, res, next) => {
       return res.status(400).json({ error: "City and blood group required" });
     }
 
-  
     const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-const filter = {
-  city: new RegExp(`^${escapeRegex(city.trim())}$`, "i"),
-  bloodGroup: bloodGroup.replace(" ", "+").trim().toUpperCase(),
-};
-console.log("Query:", req.query);
-console.log("Filter:", filter);
+    const filter = {
+      city: new RegExp(`^${escapeRegex(city.trim())}$`, "i"),
+      bloodGroup: bloodGroup.replace(" ", "+").trim().toUpperCase(),
+    };
 
     const donors = await Donor.find(filter);
     // Checking if no donors
@@ -49,7 +44,10 @@ console.log("Filter:", filter);
 // Search for a single donor
 export const searchDonor = async (req, res, next) => {
   try {
-    const donor = await Donor.findById(req.params.id).populate("user","username");
+    const donor = await Donor.findById(req.params.id).populate(
+      "user",
+      "username",
+    );
     if (!donor) {
       return res.status(404).json({ message: "Donor not found" });
     }
