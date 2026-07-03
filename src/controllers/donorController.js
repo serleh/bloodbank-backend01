@@ -57,6 +57,28 @@ export const searchDonor = async (req, res, next) => {
   }
 };
 
+// Update donor info
+
+export const updateDonor = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+
+    const donor = await Donor.findOne({ user: userId });
+
+    if (!donor) {
+      return res.status(404).json({ error: "Donor not found" });
+    }
+
+    const updatedDonor = await Donor.findByIdAndUpdate(donor.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.json(updatedDonor);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Delete a donor
 export const removeDonor = async (req, res, next) => {
   try {
