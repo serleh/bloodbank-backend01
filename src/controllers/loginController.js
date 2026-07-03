@@ -7,12 +7,15 @@ export const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username:username.toLowerCase().trim() });
+    const user = await User.findOne({
+      username: username.toLowerCase().trim(),
+    });
 
     if (!user) {
       return res.status(401).json({ error: "Invalid username or password" });
     }
-
+    console.log("PASSWORD:", password);
+    console.log("HASH:", user.passwordHash);
     const passwordCorrect = await bcrypt.compare(password, user.passwordHash);
 
     if (!passwordCorrect) {

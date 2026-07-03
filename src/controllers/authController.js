@@ -22,24 +22,24 @@ export const registerDonor = async (req, res, next) => {
     } = req.body;
 
     if (!username || !password) {
-  return res.status(400).json({ error: "Username and password required" });
-}
+      return res.status(400).json({ error: "Username and password required" });
+    }
 
     // check username
-    const existingUser = await User.findOne({ username:username.toLowerCase().trim() });
+    const existingUser = await User.findOne({
+      username: username.toLowerCase().trim(),
+    });
 
     if (existingUser) {
       return res.status(400).json({ error: "Username already exists" });
     }
-
-    
 
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
     // Create user
     const user = await User.create({
-      username:username.toLowerCase().trim(),
+      username: username.toLowerCase().trim(),
       passwordHash,
     });
 
