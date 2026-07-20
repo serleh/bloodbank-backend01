@@ -53,7 +53,6 @@ export const registerDonor = async (req, res, next) => {
       weight,
       dob,
       bloodGroup,
-      contact,
       email,
       lastDonation,
       phone,
